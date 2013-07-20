@@ -1,1 +1,6 @@
 pbr
+
+prettytable>=0.6,<0.8
+pyOpenSSL
+six
+warlock>=0.7.0,<2

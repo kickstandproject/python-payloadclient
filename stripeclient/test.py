@@ -16,7 +16,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pbr.version
+import testtools
 
 
-VERSION_INFO = pbr.version.VersionInfo('stripeclient')
+class TestCase(testtools.TestCase):
+    """Test case base class for all unit tests."""
+
+    def setUp(self):
+        """Run before each method to initialize test environment."""
+        super(TestCase, self).setUp()
