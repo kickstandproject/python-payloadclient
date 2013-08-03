@@ -27,11 +27,11 @@ from stripeclient.v1 import schemas
 
 class Client(object):
 
-    def __init__(self, *args, **kwargs):
-        self.http_client = http.HTTPClient(*args, **kwargs)
+    def __init__(self, *args):
+        self.http_client = http.HTTPClient(*args)
         self.schemas = schemas.Controller(self.http_client)
         self.queues = queues.Controller(
-            self.http_client, self._get_model('queues')
+            self.http_client, self._get_model('queue')
         )
 
     def _get_model(self, name):

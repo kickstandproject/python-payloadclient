@@ -19,7 +19,7 @@
 from stripeclient.openstack.common import importutils
 
 
-def Client(*args, **kwargs):
+def Client(*args):
     module = importutils.import_module('stripeclient.v1.client')
     client_class = getattr(module, 'Client')
-    return client_class(*args, **kwargs)
+    return client_class(*args)
