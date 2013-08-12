@@ -21,6 +21,7 @@
 import warlock
 
 from stripeclient.common import http
+from stripeclient.v1 import agents
 from stripeclient.v1 import queues
 from stripeclient.v1 import schemas
 
@@ -30,6 +31,10 @@ class Client(object):
     def __init__(self, *args):
         self.http_client = http.HTTPClient(*args)
         self.schemas = schemas.Controller(self.http_client)
+
+        self.agents = agents.Controller(
+            self.http_client, self._get_model('agent')
+        )
         self.queues = queues.Controller(
             self.http_client, self._get_model('queue')
         )
