@@ -23,4 +23,4 @@ class Controller(base.Base):
 
     def __init__(self, http_client, model):
         super(Controller, self).__init__(http_client, model)
-        self.url = '%s/%s' % (self.url, 'agents')
+        self.url = '%s/%s' % (self.url, 'queues')

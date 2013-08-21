@@ -19,40 +19,45 @@
 # limitations under the License.
 
 
-class Controller(object):
-    url = '/v1/queues'
+class Base(object):
+
+    url = '/v1'
 
     def __init__(self, http_client, model):
         self.http_client = http_client
         self.model = model
 
     def create(self, body):
-        """Create a queue."""
+        """Create an object."""
         url = self.url
-        resp, queue = self.http_client.json_request('POST', url, body=body)
-        return self.model(queue)
+        resp, body = self.http_client.json_request('POST', url, body=body)
 
-    def delete(self, queue_id):
-        """Delete a queue."""
-        url = '%s/%s' % (self.url, queue_id)
+        return self.model(body)
+
+    def delete(self, id):
+        """Delete an object."""
+        url = '%s/%s' % (self.url, id)
         self.http_client.json_request('DELETE', url)
 
-    def edit(self, queue_id, body):
-        """Edit a queue."""
-        url = '%s/%s' % (self.url, queue_id)
-        resp, queue = self.http_client.json_request('PUT', url, body=body)
-        return self.model(queue)
+    def edit(self, id, body):
+        """Edit an object."""
+        url = '%s/%s' % (self.url, id)
+        resp, body = self.http_client.json_request('PUT', url, body=body)
+
+        return self.model(body)
 
     def get_all(self):
-        """List queues."""
+        """List all objects."""
         url = self.url
         resp, body = self.http_client.json_request('GET', url)
-        for queue in body:
-            yield self.model(queue)
 
-    def get_one(self, queue_id):
-        """Get a single queue."""
-        url = '%s/%s' % (self.url, queue_id)
+        for item in body:
+            yield self.model(item)
+
+    def get_one(self, id):
+        """Get a single object."""
+        url = '%s/%s' % (self.url, id)
         resp, body = self.http_client.json_request('GET', url)
         body.pop('self', None)
+
         return self.model(**body)
