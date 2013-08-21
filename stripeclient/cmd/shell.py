@@ -23,6 +23,7 @@ from cliff import commandmanager
 
 from stripeclient.common import utils
 from stripeclient.openstack.common import log as logging
+from stripeclient.v1 import client
 from stripeclient import version
 
 LOG = logging.getLogger(__name__)
@@ -48,8 +49,8 @@ class Shell(app.App):
 
         return parser
 
-    def prepare_to_run_command(self, cmd):
-        super(Shell, self).prepare_to_run_command(cmd)
+    def initialize_app(self, argv):
+        super(Shell, self).initialize_app(argv)
 
         if not self.options.os_stripe_url:
             raise RuntimeError(
@@ -57,7 +58,7 @@ class Shell(app.App):
                 'ENV[OS_STRIPE_URL]'
             )
 
-        return
+        self.http_client = client.Client(self.options.os_stripe_url)
 
 
 def main(argv=sys.argv[1:]):

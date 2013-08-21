@@ -21,7 +21,6 @@ from cliff import lister
 from cliff import show
 
 from stripeclient.openstack.common import log as logging
-from stripeclient.v1 import client
 
 LOG = logging.getLogger(__name__)
 
@@ -42,15 +41,14 @@ class AgentAdd(show.ShowOne):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
+
         json = {
             'id': parsed_args.id,
             'name': parsed_args.name,
             'password': parsed_args.password,
         }
 
-        res = self.http_client.agents.create(json)
+        res = self.app.http_client.agents.create(json)
 
         return zip(*sorted(res.items()))
 
@@ -64,10 +62,7 @@ class AgentDelete(command.Command):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
-
-        self.http_client.agents.delete(parsed_args.id)
+        self.app.http_client.agents.delete(parsed_args.id)
 
 
 class AgentShow(lister.Lister):
@@ -82,13 +77,10 @@ class AgentShow(lister.Lister):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
-
         if parsed_args.id:
-            data = [self.http_client.agents.get_one(parsed_args.id)]
+            data = [self.app.http_client.agents.get_one(parsed_args.id)]
         else:
-            data = self.http_client.agents.get_all()
+            data = self.app.http_client.agents.get_all()
 
         columns = (
             'id',
@@ -130,8 +122,6 @@ class QueueAdd(show.ShowOne):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
         json = {
             'id': parsed_args.id,
             'description': parsed_args.description,
@@ -139,7 +129,7 @@ class QueueAdd(show.ShowOne):
             'name': parsed_args.name,
         }
 
-        data = self.http_client.queues.create(json)
+        data = self.app.http_client.queues.create(json)
 
         return zip(*sorted(data.items()))
 
@@ -153,10 +143,7 @@ class QueueDelete(command.Command):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
-
-        self.http_client.queues.delete(parsed_args.id)
+        self.app.http_client.queues.delete(parsed_args.id)
 
 
 class QueueShow(lister.Lister):
@@ -171,13 +158,10 @@ class QueueShow(lister.Lister):
         return parser
 
     def take_action(self, parsed_args):
-        endpoint = self.app_args.os_stripe_url
-        self.http_client = client.Client(endpoint)
-
         if parsed_args.id:
-            data = [self.http_client.queues.get_one(parsed_args.id)]
+            data = [self.app.http_client.queues.get_one(parsed_args.id)]
         else:
-            data = self.http_client.queues.get_all()
+            data = self.app.http_client.queues.get_all()
 
         columns = (
             'id',
