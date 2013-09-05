@@ -29,9 +29,8 @@ class AgentAdd(show.ShowOne):
 
     def get_parser(self, prog_name):
         parser = super(AgentAdd, self).get_parser(prog_name)
-        parser.add_argument('name', metavar='name', help='Agent name')
         parser.add_argument(
-            'password', metavar='password', help='Agent password'
+            'user_id', metavar='user_id', help='User ID'
         )
         parser.add_argument(
             '--id', type=int, default=None,
@@ -44,8 +43,7 @@ class AgentAdd(show.ShowOne):
 
         json = {
             'id': parsed_args.id,
-            'name': parsed_args.name,
-            'password': parsed_args.password,
+            'user_id': parsed_args.user_id,
         }
 
         res = self.app.http_client.agents.create(json)
@@ -84,16 +82,14 @@ class AgentShow(lister.Lister):
 
         columns = (
             'id',
-            'name',
-            'password',
+            'user_id',
             'created_at',
             'updated_at',
         )
 
         res = ((
             q.id,
-            q.name,
-            q.password,
+            q.user_id,
             q.created_at,
             q.updated_at,
         ) for q in data)
@@ -165,18 +161,20 @@ class QueueShow(lister.Lister):
 
         columns = (
             'id',
-            'name',
             'description',
             'disabled',
+            'name',
+            'user_id',
             'created_at',
             'updated_at',
         )
 
         res = ((
             q.id,
-            q.name,
             q.description,
             q.disabled,
+            q.name,
+            q.user_id,
             q.created_at,
             q.updated_at,
         ) for q in data)
