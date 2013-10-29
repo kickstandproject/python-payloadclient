@@ -25,7 +25,7 @@ import unicodedata
 
 import six
 
-from stripeclient.openstack.common.gettextutils import _
+from stripeclient.openstack.common.gettextutils import _  # noqa
 
 
 # Used for looking up extensions of text
