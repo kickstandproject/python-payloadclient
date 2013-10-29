@@ -3,6 +3,7 @@ Babel>=0.9.6
 
 cliff
 pyOpenSSL
+python-keystoneclient>=0.4.1
 six
 warlock>=0.7.0,<2
 

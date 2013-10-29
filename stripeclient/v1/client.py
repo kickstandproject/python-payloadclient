@@ -29,8 +29,8 @@ from stripeclient.v1 import users
 
 class Client(object):
 
-    def __init__(self, *args):
-        self.http_client = http.HTTPClient(*args)
+    def __init__(self, *args, **kwargs):
+        self.http_client = http.HTTPClient(*args, **kwargs)
         self.schemas = schemas.Controller(self.http_client)
 
         self.agents = agents.Controller(

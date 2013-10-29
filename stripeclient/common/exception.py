@@ -16,6 +16,22 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import sys
+
+
+_code_map = {}
+for obj_name in dir(sys.modules[__name__]):
+    if obj_name.startswith('HTTP'):
+        obj = getattr(sys.modules[__name__], obj_name)
+        _code_map[obj.code] = obj
+
+
+def from_response(response, error=None):
+    """Return an instance of an HTTPException based on httplib response."""
+    cls = _code_map.get(response.status, HTTPException)
+
+    return cls(error)
+
 
 class BaseException(Exception):
     """An error occurred."""
@@ -24,6 +40,10 @@ class BaseException(Exception):
 
     def __str__(self):
         return self.message or self.__class__.__doc__
+
+
+class CommandError(BaseException):
+    """Invalid usage of CLI."""
 
 
 class CommunicationError(BaseException):
@@ -39,16 +59,3 @@ class HTTPException(Exception):
 
     def __str__(self):
         return "%s (HTTP %s)" % (self.details, self.code)
-
-
-_code_map = {}
-
-
-def from_response(response, body=None):
-    """Return an instance of an HTTPException based on httplib response."""
-    cls = _code_map.get(response.status, HTTPException)
-    if body:
-        details = body.replace('\n\n', '\n')
-        return cls(details=details)
-
-    return cls()

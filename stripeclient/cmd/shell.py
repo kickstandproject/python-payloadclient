@@ -21,9 +21,10 @@ import sys
 from cliff import app
 from cliff import commandmanager
 
+from stripeclient import client
+from stripeclient.common import exception
 from stripeclient.common import utils
 from stripeclient.openstack.common import log as logging
-from stripeclient.v1 import client
 from stripeclient import version
 
 LOG = logging.getLogger(__name__)
@@ -31,34 +32,74 @@ LOG = logging.getLogger(__name__)
 
 class Shell(app.App):
 
-    def __init__(self):
+    def __init__(self, apiversion='1'):
         super(Shell, self).__init__(
             description='Stripe client', version=version.VERSION_INFO,
             command_manager=commandmanager.CommandManager('stripe.shell'),
         )
 
+        self.api_version = apiversion
+
+    def authenticate_user(self):
+        if not self.options.ksp_username:
+            raise exception.CommandError(
+                'You must provide a username via either --ksp-username or '
+                'env[KSP_USERNAME]')
+        if not self.options.ksp_password:
+            raise exception.CommandError(
+                'You must provide a password via either --ksp-password or '
+                'env[KSP_PASSWORD]')
+        if not self.options.stripe_url:
+            raise exception.CommandError(
+                'You must provide a url via either --stripe-url or '
+                'env[STRIPE_URL]')
+
+        self.http_client = client.get_client(
+            self.api_version, **(self.options.__dict__))
+
+        return
+
     def build_option_parser(self, description, version, argparse_kwargs=None):
         parser = super(Shell, self).build_option_parser(
             description, version, argparse_kwargs
         )
+
         parser.add_argument(
-            '--os-stripe-url',
-            default=utils.env('OS_STRIPE_URL'),
-            help='Defaults to env[OS_STRIPE_URL]',
-        )
+            '--ksp-auth-token', default=utils.env('KSP_AUTH_TOKEN'),
+            help='Defaults to env[KSP_AUTH_TOKEN]')
+        parser.add_argument(
+            '--ksp-auth-url', default=utils.env('KSP_AUTH_URL'),
+            help='Defaults to env[KSP_AUTH_URL]')
+        parser.add_argument(
+            '--ksp-password', default=utils.env('KSP_PASSWORD'),
+            help='Defaults to env[KSP_PASSWORD]')
+        parser.add_argument(
+            '--ksp-tenant-id', default=utils.env('KSP_TENANT_ID'),
+            help='Defaults to env[KSP_TENANT_ID]')
+        parser.add_argument(
+            '--ksp-tenant-name', default=utils.env('KSP_TENANT_NAME'),
+            help='Defaults to env[KSP_TENANT_NAME]')
+        parser.add_argument(
+            '--ksp-username', default=utils.env('KSP_USERNAME'),
+            help='Defaults to env[KSP_USERNAME]')
+        parser.add_argument(
+            '--stripe-url', default=utils.env('STRIPE_URL'),
+            help='Defaults to env[STRIPE_URL]')
 
         return parser
 
     def initialize_app(self, argv):
         super(Shell, self).initialize_app(argv)
 
-        if not self.options.os_stripe_url:
-            raise RuntimeError(
-                'You must provide a stripe url via --os-stripe-url or '
-                'ENV[OS_STRIPE_URL]'
-            )
+        logging.setup('stripeclient')
+        cmd_name = None
 
-        self.http_client = client.Client(self.options.os_stripe_url)
+        if argv:
+            cmd_info = self.command_manager.find_command(argv)
+            cmd_factory, cmd_name, sub_argv = cmd_info
+
+        if self.interactive_mode or cmd_name != 'help':
+            self.authenticate_user()
 
 
 def main(argv=sys.argv[1:]):
