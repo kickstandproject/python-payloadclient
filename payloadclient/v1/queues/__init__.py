@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from stripeclient.v1 import base
+from payloadclient.v1 import base
 
 
 class Controller(base.Base):

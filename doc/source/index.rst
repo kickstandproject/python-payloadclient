@@ -1,5 +1,5 @@
-Welcome to python-stripeclient's documentation!
-===============================================
+Welcome to python-payloadclient's documentation!
+================================================
 
 Contents:
 

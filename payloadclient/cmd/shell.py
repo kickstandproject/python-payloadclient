@@ -21,11 +21,11 @@ import sys
 from cliff import app
 from cliff import commandmanager
 
-from stripeclient import client
-from stripeclient.common import exception
-from stripeclient.common import utils
-from stripeclient.openstack.common import log as logging
-from stripeclient import version
+from payloadclient import client
+from payloadclient.common import exception
+from payloadclient.common import utils
+from payloadclient.openstack.common import log as logging
+from payloadclient import version
 
 LOG = logging.getLogger(__name__)
 
@@ -34,8 +34,8 @@ class Shell(app.App):
 
     def __init__(self, apiversion='1'):
         super(Shell, self).__init__(
-            description='Stripe client', version=version.VERSION_INFO,
-            command_manager=commandmanager.CommandManager('stripe.shell'),
+            description='payload client', version=version.VERSION_INFO,
+            command_manager=commandmanager.CommandManager('payload.shell'),
         )
 
         self.api_version = apiversion
@@ -49,10 +49,10 @@ class Shell(app.App):
             raise exception.CommandError(
                 'You must provide a password via either --ksp-password or '
                 'env[KSP_PASSWORD]')
-        if not self.options.stripe_url:
+        if not self.options.payload_url:
             raise exception.CommandError(
-                'You must provide a url via either --stripe-url or '
-                'env[STRIPE_URL]')
+                'You must provide a url via either --payload-url or '
+                'env[payload_URL]')
 
         self.http_client = client.get_client(
             self.api_version, **(self.options.__dict__))
@@ -83,15 +83,15 @@ class Shell(app.App):
             '--ksp-username', default=utils.env('KSP_USERNAME'),
             help='Defaults to env[KSP_USERNAME]')
         parser.add_argument(
-            '--stripe-url', default=utils.env('STRIPE_URL'),
-            help='Defaults to env[STRIPE_URL]')
+            '--payload-url', default=utils.env('payload_URL'),
+            help='Defaults to env[payload_URL]')
 
         return parser
 
     def initialize_app(self, argv):
         super(Shell, self).initialize_app(argv)
 
-        logging.setup('stripeclient')
+        logging.setup('payloadclient')
         cmd_name = None
 
         if argv:

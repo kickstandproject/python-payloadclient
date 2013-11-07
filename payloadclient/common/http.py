@@ -28,10 +28,10 @@ try:
 except ImportError:
     import simplejson as json
 
-from stripeclient.common import exception
+from payloadclient.common import exception
 
 LOG = logging.getLogger(__name__)
-USER_AGENT = 'python-stripeclient'
+USER_AGENT = 'python-payloadclient'
 CHUNKSIZE = 1024 * 64  # 64kB
 
 

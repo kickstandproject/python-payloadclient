@@ -23,7 +23,7 @@ import requests
 import StringIO
 import testtools
 
-from stripeclient.common import http
+from payloadclient.common import http
 
 
 class FakeAPI(object):

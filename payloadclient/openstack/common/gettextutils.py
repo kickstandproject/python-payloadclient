@@ -21,7 +21,7 @@ gettext for openstack-common modules.
 
 Usual usage in an openstack.common module:
 
-    from stripeclient.openstack.common.gettextutils import _
+    from payloadclient.openstack.common.gettextutils import _
 """
 
 import copy
@@ -37,8 +37,8 @@ except ImportError:
 from babel import localedata
 import six
 
-_localedir = os.environ.get('stripeclient'.upper() + '_LOCALEDIR')
-_t = gettext.translation('stripeclient', localedir=_localedir, fallback=True)
+_localedir = os.environ.get('payloadclient'.upper() + '_LOCALEDIR')
+_t = gettext.translation('payloadclient', localedir=_localedir, fallback=True)
 
 _AVAILABLE_LANGUAGES = {}
 USE_LAZY = False
@@ -58,7 +58,7 @@ def enable_lazy():
 
 def _(msg):
     if USE_LAZY:
-        return Message(msg, 'stripeclient')
+        return Message(msg, 'payloadclient')
     else:
         if six.PY3:
             return _t.gettext(msg)

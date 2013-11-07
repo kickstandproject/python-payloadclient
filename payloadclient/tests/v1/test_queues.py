@@ -18,13 +18,13 @@
 
 import warlock
 
-from stripeclient import test
-from stripeclient.tests import utils
-from stripeclient.v1 import agents
+from payloadclient import test
+from payloadclient.tests import utils
+from payloadclient.v1 import queues
 
 
 FIXTURES = {
-    '/v1/agents/1': {
+    '/v1/queues/1': {
         'DELETE': (
             {},
             {
@@ -35,28 +35,28 @@ FIXTURES = {
             {},
             {
                 'id': '1',
-                'name': 'Paul Belanger',
+                'name': 'support',
             },
         ),
         'PUT': (
             {},
             {
                 'id': '1',
-                'name': 'Paul Belanger',
+                'name': 'sales',
             },
         ),
     },
-    '/v1/agents': {
+    '/v1/queues': {
         'GET': (
             {},
             [
                 {
                     'id': '1',
-                    'name': 'Paul Belanger',
+                    'name': 'support',
                 },
                 {
                     'id': '2',
-                    'name': 'Leif Madsen',
+                    'name': 'sales',
                 },
             ],
         ),
@@ -64,14 +64,14 @@ FIXTURES = {
             {},
             {
                 'id': '1',
-                'name': 'Paul Belanger',
+                'name': 'support',
             },
         ),
     },
 }
 
 FAKE_SCHEMA = {
-    'name': 'agents',
+    'name': 'queues',
     'properties': {
         'id': {},
         'name': {}
@@ -86,40 +86,40 @@ class TestCase(test.TestCase):
     def setUp(self):
         super(TestCase, self).setUp()
         self.api = utils.FakeAPI(FIXTURES)
-        self.controller = agents.Controller(self.api, FAKE_MODEL)
+        self.controller = queues.Controller(self.api, FAKE_MODEL)
 
-    def test_create_agent(self):
+    def test_create_queue(self):
         json = {
             'id': '1',
-            'name': 'Paul Belanger',
+            'name': 'support',
         }
-        res = self.controller.create(json)
-        self.assertEqual(res.id, '1')
-        self.assertEqual(res.name, 'Paul Belanger')
+        queue = self.controller.create(json)
+        self.assertEqual(queue.id, '1')
+        self.assertEqual(queue.name, 'support')
 
-    def test_delete_agent(self):
+    def test_delete_queue(self):
         self.controller.delete('1')
         expect = [(
-            'DELETE', '/v1/agents/1', {}, None
+            'DELETE', '/v1/queues/1', {}, None
         )]
         self.assertEqual(self.api.calls, expect)
 
-    def test_edit_agent(self):
+    def test_edit_queue(self):
         json = {
-            'name': 'Paul Belanger',
+            'name': 'sales',
         }
-        res = self.controller.edit('1', json)
-        self.assertEqual(res.id, '1')
-        self.assertEqual(res.name, 'Paul Belanger')
+        queue = self.controller.edit('1', json)
+        self.assertEqual(queue.id, '1')
+        self.assertEqual(queue.name, 'sales')
 
-    def test_get_one_agent(self):
-        res = self.controller.get_one('1')
-        self.assertEqual(res.id, '1')
-        self.assertEqual(res.name, 'Paul Belanger')
+    def test_get_one_queue(self):
+        queue = self.controller.get_one('1')
+        self.assertEqual(queue.id, '1')
+        self.assertEqual(queue.name, 'support')
 
-    def test_get_all_agent(self):
-        res = list(self.controller.get_all())
-        self.assertEqual(res[0].id, '1')
-        self.assertEqual(res[0].name, 'Paul Belanger')
-        self.assertEqual(res[1].id, '2')
-        self.assertEqual(res[1].name, 'Leif Madsen')
+    def test_get_all_queue(self):
+        queues = list(self.controller.get_all())
+        self.assertEqual(queues[0].id, '1')
+        self.assertEqual(queues[0].name, 'support')
+        self.assertEqual(queues[1].id, '2')
+        self.assertEqual(queues[1].name, 'sales')

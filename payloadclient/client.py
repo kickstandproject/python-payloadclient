@@ -18,7 +18,7 @@
 
 from keystoneclient.v2_0 import client as ksclient
 
-from stripeclient.openstack.common import importutils
+from payloadclient.openstack.common import importutils
 
 
 def _get_ksclient(**kwargs):
@@ -43,8 +43,8 @@ def _get_ksclient(**kwargs):
 
 
 def get_client(api_version, **kwargs):
-    endpoint = kwargs.get('stripe_url')
-    if kwargs.get('ksp_auth_token') and kwargs.get('stripe_url'):
+    endpoint = kwargs.get('payload_url')
+    if kwargs.get('ksp_auth_token') and kwargs.get('payload_url'):
         token = kwargs.get('ksp_auth_token')
     elif (kwargs.get('ksp_username') and
             kwargs.get('ksp_password') and
@@ -70,6 +70,6 @@ def get_client(api_version, **kwargs):
 
 
 def Client(version, *args, **kwargs):
-    module = importutils.import_module('stripeclient.v1.client')
+    module = importutils.import_module('payloadclient.v1.client')
     client_class = getattr(module, 'Client')
     return client_class(*args, **kwargs)

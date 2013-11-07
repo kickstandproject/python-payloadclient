@@ -20,7 +20,7 @@ from cliff import command
 from cliff import lister
 from cliff import show
 
-from stripeclient.openstack.common import log as logging
+from payloadclient.openstack.common import log as logging
 
 LOG = logging.getLogger(__name__)
 

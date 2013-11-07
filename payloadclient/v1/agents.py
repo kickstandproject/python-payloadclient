@@ -16,7 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import pbr.version
+from payloadclient.v1 import base
 
 
-VERSION_INFO = pbr.version.VersionInfo('stripeclient')
+class Controller(base.Base):
+
+    def __init__(self, http_client, model):
+        super(Controller, self).__init__(http_client, model)
+        self.url = '%s/%s' % (self.url, 'agents')

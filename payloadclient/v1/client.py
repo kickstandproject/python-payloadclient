@@ -20,10 +20,10 @@
 
 import warlock
 
-from stripeclient.common import http
-from stripeclient.v1 import agents
-from stripeclient.v1 import queues
-from stripeclient.v1 import schemas
+from payloadclient.common import http
+from payloadclient.v1 import agents
+from payloadclient.v1 import queues
+from payloadclient.v1 import schemas
 
 
 class Client(object):

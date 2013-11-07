@@ -46,9 +46,9 @@ except ImportError:
 
 import six
 
-from stripeclient.openstack.common import gettextutils
-from stripeclient.openstack.common import importutils
-from stripeclient.openstack.common import timeutils
+from payloadclient.openstack.common import gettextutils
+from payloadclient.openstack.common import importutils
+from payloadclient.openstack.common import timeutils
 
 netaddr = importutils.try_import("netaddr")
 

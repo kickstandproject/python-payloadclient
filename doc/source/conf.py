@@ -15,37 +15,37 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
 # implied.
 
-from stripeclient import version
+from payloadclient import version
 
 
 extensions = ['sphinx.ext.autodoc']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'StripeClient'
+project = u'payloadClient'
 copyright = u'2013, Paul Belanger'
 release = version.VERSION_INFO.version_string_with_vcs()
 version = version.VERSION_INFO.canonical_version_string()
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'default'
-htmlhelp_basename = 'stripeclientdoc'
+htmlhelp_basename = 'payloadclientdoc'
 
 latex_elements = {
 }
 
 latex_documents = [
-    ('index', 'StripeClient.tex', u'Stripe Client Documentation',
+    ('index', 'payloadClient.tex', u'payload Client Documentation',
      u'Paul Belanger', 'manual'),
 ]
 
 man_pages = [
-    ('index', 'StripeClient', u'Stripe Client Documentation',
+    ('index', 'payloadClient', u'payload Client Documentation',
      [u'Paul Belanger'], 1)
 ]
 
 texinfo_documents = [
-    ('index', 'StripeClient', u'Stripe Client Documentation',
-     u'Paul Belanger', 'StripeClient', 'One line description of project.',
+    ('index', 'payloadClient', u'payload Client Documentation',
+     u'Paul Belanger', 'payloadClient', 'One line description of project.',
      'Miscellaneous'),
 ]
