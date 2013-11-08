@@ -15,12 +15,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from payloadclient.v1 import base
-
-
-class Controller(base.Base):
-
-    def __init__(self, http_client, model):
-        super(Controller, self).__init__(http_client, model)
-        self.url = '%s/%s' % (self.url, 'agents')

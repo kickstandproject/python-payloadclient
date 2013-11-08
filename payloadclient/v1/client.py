@@ -18,27 +18,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import warlock
-
 from payloadclient.common import http
-from payloadclient.v1 import agents
-from payloadclient.v1 import queues
-from payloadclient.v1 import schemas
+from payloadclient.v1 import agent
+from payloadclient.v1 import queue
 
 
-class Client(object):
+class Client(http.HTTPClient):
 
     def __init__(self, *args, **kwargs):
-        self.http_client = http.HTTPClient(*args, **kwargs)
-        self.schemas = schemas.Controller(self.http_client)
-
-        self.agents = agents.Controller(
-            self.http_client, self._get_model('agent')
-        )
-        self.queues = queues.Controller(
-            self.http_client, self._get_model('queue')
-        )
-
-    def _get_model(self, name):
-        schema = self.schemas.get(name)
-        return warlock.model_factory(schema.raw())
+        super(Client, self).__init__(*args, **kwargs)
+        self.agents = agent.AgentManager(self)
+        self.queues = queue.QueueManager(self)

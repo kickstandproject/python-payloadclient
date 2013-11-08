@@ -16,6 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Command-line interface for the Payload APIs.
+"""
+
 import sys
 
 from cliff import app
@@ -26,9 +30,28 @@ from payloadclient import client
 from payloadclient.common import exception
 from payloadclient.common import utils
 from payloadclient.openstack.common import log as logging
+from payloadclient.shell.v1 import agent
+from payloadclient.shell.v1 import queue
 from payloadclient import version
 
+
 CONF = cfg.CONF
+
+COMMAND = {
+    'agent-create': agent.CreateAgent,
+    'agent-delete': agent.DeleteAgent,
+    'agent-list': agent.ListAgent,
+    'agent-show': agent.ShowAgent,
+    'queue-create': queue.CreateQueue,
+    'queue-delete': queue.DeleteQueue,
+    'queue-list': queue.ListQueue,
+    'queue-show': queue.ShowQueue,
+}
+
+COMMANDS = {
+    '1': COMMAND,
+}
+
 LOG = logging.getLogger(__name__)
 
 
@@ -36,9 +59,11 @@ class Shell(app.App):
 
     def __init__(self, apiversion='1'):
         super(Shell, self).__init__(
-            description='payload client', version=version.VERSION_INFO,
-            command_manager=commandmanager.CommandManager('payload.shell'),
-        )
+            description=__doc__.strip(), version=version.VERSION_INFO,
+            command_manager=commandmanager.CommandManager('payload.shell'))
+        self.commands = COMMANDS
+        for key, val in self.commands[apiversion].items():
+            self.command_manager.add_command(key, val)
 
         self.api_version = apiversion
 
@@ -56,15 +81,14 @@ class Shell(app.App):
                 'You must provide a url via either --payload-url or '
                 'env[PAYLOAD_URL]')
 
-        self.http_client = client.get_client(
+        self.client_manager = client.get_client(
             self.api_version, **(self.options.__dict__))
 
         return
 
     def build_option_parser(self, description, version, argparse_kwargs=None):
         parser = super(Shell, self).build_option_parser(
-            description, version, argparse_kwargs
-        )
+            description, version, argparse_kwargs)
 
         parser.add_argument(
             '--os-auth-token', default=utils.env('OS_AUTH_TOKEN'),
