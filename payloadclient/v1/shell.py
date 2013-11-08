@@ -165,6 +165,7 @@ class QueueShow(lister.Lister):
             'disabled',
             'name',
             'user_id',
+            'uuid',
             'created_at',
             'updated_at',
         )
@@ -175,6 +176,7 @@ class QueueShow(lister.Lister):
             q.disabled,
             q.name,
             q.user_id,
+            q.uuid,
             q.created_at,
             q.updated_at,
         ) for q in data)

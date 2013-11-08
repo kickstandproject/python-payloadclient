@@ -46,9 +46,11 @@ class HTTPClient(object):
         try:
             body_json = json.loads(body)
 
-            if 'message' in body_json:
-                return body_json['message']
+            if 'error_message' in body_json:
+                body_json = json.loads(body_json['error_message'])
 
+                if 'faultstring' in body_json:
+                    return body_json['faultstring']
         except ValueError:
             pass
 
