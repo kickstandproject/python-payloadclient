@@ -20,6 +20,7 @@ import sys
 
 from cliff import app
 from cliff import commandmanager
+from oslo.config import cfg
 
 from payloadclient import client
 from payloadclient.common import exception
@@ -27,6 +28,7 @@ from payloadclient.common import utils
 from payloadclient.openstack.common import log as logging
 from payloadclient import version
 
+CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 
 
@@ -87,6 +89,14 @@ class Shell(app.App):
             help='Defaults to env[payload_URL]')
 
         return parser
+
+    def configure_logging(self):
+        if self.options.debug:
+            CONF.debug = True
+        elif self.options.verbose_level:
+            CONF.verbose = True
+
+        return
 
     def initialize_app(self, argv):
         super(Shell, self).initialize_app(argv)
