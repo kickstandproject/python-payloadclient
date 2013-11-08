@@ -34,14 +34,14 @@ class Base(object):
 
         return self.model(body)
 
-    def delete(self, id):
+    def delete(self, uuid):
         """Delete an object."""
-        url = '%s/%s' % (self.url, id)
+        url = '%s/%s' % (self.url, uuid)
         self.http_client.json_request('DELETE', url)
 
-    def edit(self, id, body):
+    def edit(self, uuid, body):
         """Edit an object."""
-        url = '%s/%s' % (self.url, id)
+        url = '%s/%s' % (self.url, uuid)
         resp, body = self.http_client.json_request('PUT', url, body=body)
 
         return self.model(body)
@@ -54,9 +54,9 @@ class Base(object):
         for item in body:
             yield self.model(item)
 
-    def get_one(self, id):
+    def get_one(self, uuid):
         """Get a single object."""
-        url = '%s/%s' % (self.url, id)
+        url = '%s/%s' % (self.url, uuid)
         resp, body = self.http_client.json_request('GET', url)
         body.pop('self', None)
 

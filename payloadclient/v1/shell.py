@@ -32,17 +32,11 @@ class AgentAdd(show.ShowOne):
         parser.add_argument(
             'user_id', metavar='user_id', help='User ID'
         )
-        parser.add_argument(
-            '--id', type=int, default=None,
-            help='(Default: None)'
-        )
 
         return parser
 
     def take_action(self, parsed_args):
-
         json = {
-            'id': parsed_args.id,
             'user_id': parsed_args.user_id,
         }
 
@@ -55,12 +49,12 @@ class AgentDelete(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(AgentDelete, self).get_parser(prog_name)
-        parser.add_argument('id', metavar='id', help='Agent ID')
+        parser.add_argument('uuid', metavar='uuid', help='Agent UUID')
 
         return parser
 
     def take_action(self, parsed_args):
-        self.app.http_client.agents.delete(parsed_args.id)
+        self.app.http_client.agents.delete(uuid=parsed_args.uuid)
 
 
 class AgentShow(lister.Lister):
@@ -68,27 +62,27 @@ class AgentShow(lister.Lister):
     def get_parser(self, prog_name):
         parser = super(AgentShow, self).get_parser(prog_name)
         parser.add_argument(
-            'id', type=int, nargs='?', default=None,
+            'uuid', nargs='?', default=None,
             help='(Default: None)'
         )
 
         return parser
 
     def take_action(self, parsed_args):
-        if parsed_args.id:
-            data = [self.app.http_client.agents.get_one(parsed_args.id)]
+        if parsed_args.uuid:
+            data = [self.app.http_client.agents.get_one(uuid=parsed_args.uuid)]
         else:
             data = self.app.http_client.agents.get_all()
 
         columns = (
-            'id',
+            'uuid',
             'user_id',
             'created_at',
             'updated_at',
         )
 
         res = ((
-            q.id,
+            q.uuid,
             q.user_id,
             q.created_at,
             q.updated_at,
@@ -110,16 +104,11 @@ class QueueAdd(show.ShowOne):
             '--disabled', type=bool, default=False,
             help='(Default: False)'
         )
-        parser.add_argument(
-            '--id', type=int, default=None,
-            help='(Default: None)'
-        )
 
         return parser
 
     def take_action(self, parsed_args):
         json = {
-            'id': parsed_args.id,
             'description': parsed_args.description,
             'disabled': parsed_args.disabled,
             'name': parsed_args.name,
@@ -134,12 +123,12 @@ class QueueDelete(command.Command):
 
     def get_parser(self, prog_name):
         parser = super(QueueDelete, self).get_parser(prog_name)
-        parser.add_argument('id', metavar='id', help='Queue ID')
+        parser.add_argument('uuid', metavar='uuid', help='Queue UUID')
 
         return parser
 
     def take_action(self, parsed_args):
-        self.app.http_client.queues.delete(parsed_args.id)
+        self.app.http_client.queues.delete(uuid=parsed_args.uuid)
 
 
 class QueueShow(lister.Lister):
@@ -147,36 +136,34 @@ class QueueShow(lister.Lister):
     def get_parser(self, prog_name):
         parser = super(QueueShow, self).get_parser(prog_name)
         parser.add_argument(
-            'id', type=int, nargs='?', default=None,
+            'uuid', nargs='?', default=None,
             help='(Default: None)'
         )
 
         return parser
 
     def take_action(self, parsed_args):
-        if parsed_args.id:
-            data = [self.app.http_client.queues.get_one(parsed_args.id)]
+        if parsed_args.uuid:
+            data = [self.app.http_client.queues.get_one(uuid=parsed_args.uuid)]
         else:
             data = self.app.http_client.queues.get_all()
 
         columns = (
-            'id',
+            'uuid',
             'description',
             'disabled',
             'name',
             'user_id',
-            'uuid',
             'created_at',
             'updated_at',
         )
 
         res = ((
-            q.id,
+            q.uuid,
             q.description,
             q.disabled,
             q.name,
             q.user_id,
-            q.uuid,
             q.created_at,
             q.updated_at,
         ) for q in data)
