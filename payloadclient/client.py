@@ -44,20 +44,20 @@ def _get_ksclient(**kwargs):
 
 def get_client(api_version, **kwargs):
     endpoint = kwargs.get('payload_url')
-    if kwargs.get('ksp_auth_token') and kwargs.get('payload_url'):
-        token = kwargs.get('ksp_auth_token')
-    elif (kwargs.get('ksp_username') and
-            kwargs.get('ksp_password') and
-            kwargs.get('ksp_auth_url') and
-            (kwargs.get('ksp_tenant_id') or
-                kwargs.get('ksp_tenant_name'))):
+    if kwargs.get('os_auth_token') and kwargs.get('payload_url'):
+        token = kwargs.get('os_auth_token')
+    elif (kwargs.get('os_username') and
+            kwargs.get('os_password') and
+            kwargs.get('os_auth_url') and
+            (kwargs.get('os_tenant_id') or
+                kwargs.get('os_tenant_name'))):
 
         ks_kwargs = {
-            'username': kwargs.get('ksp_username'),
-            'password': kwargs.get('ksp_password'),
-            'tenant_id': kwargs.get('ksp_tenant_id'),
-            'tenant_name': kwargs.get('ksp_tenant_name'),
-            'auth_url': kwargs.get('ksp_auth_url'),
+            'username': kwargs.get('os_username'),
+            'password': kwargs.get('os_password'),
+            'tenant_id': kwargs.get('os_tenant_id'),
+            'tenant_name': kwargs.get('os_tenant_name'),
+            'auth_url': kwargs.get('os_auth_url'),
         }
         _ksclient = _get_ksclient(**ks_kwargs)
         token = _ksclient.auth_token

@@ -41,18 +41,18 @@ class Shell(app.App):
         self.api_version = apiversion
 
     def authenticate_user(self):
-        if not self.options.ksp_username:
+        if not self.options.os_username:
             raise exception.CommandError(
-                'You must provide a username via either --ksp-username or '
-                'env[KSP_USERNAME]')
-        if not self.options.ksp_password:
+                'You must provide a username via either --os-username or '
+                'env[OS_USERNAME]')
+        if not self.options.os_password:
             raise exception.CommandError(
-                'You must provide a password via either --ksp-password or '
-                'env[KSP_PASSWORD]')
+                'You must provide a password via either --os-password or '
+                'env[OS_PASSWORD]')
         if not self.options.payload_url:
             raise exception.CommandError(
                 'You must provide a url via either --payload-url or '
-                'env[payload_URL]')
+                'env[PAYLOAD_URL]')
 
         self.http_client = client.get_client(
             self.api_version, **(self.options.__dict__))
@@ -65,23 +65,23 @@ class Shell(app.App):
         )
 
         parser.add_argument(
-            '--ksp-auth-token', default=utils.env('KSP_AUTH_TOKEN'),
-            help='Defaults to env[KSP_AUTH_TOKEN]')
+            '--os-auth-token', default=utils.env('OS_AUTH_TOKEN'),
+            help='Defaults to env[OS_AUTH_TOKEN]')
         parser.add_argument(
-            '--ksp-auth-url', default=utils.env('KSP_AUTH_URL'),
-            help='Defaults to env[KSP_AUTH_URL]')
+            '--os-auth-url', default=utils.env('OS_AUTH_URL'),
+            help='Defaults to env[OS_AUTH_URL]')
         parser.add_argument(
-            '--ksp-password', default=utils.env('KSP_PASSWORD'),
-            help='Defaults to env[KSP_PASSWORD]')
+            '--os-password', default=utils.env('OS_PASSWORD'),
+            help='Defaults to env[OS_PASSWORD]')
         parser.add_argument(
-            '--ksp-tenant-id', default=utils.env('KSP_TENANT_ID'),
-            help='Defaults to env[KSP_TENANT_ID]')
+            '--os-tenant-id', default=utils.env('OS_TENANT_ID'),
+            help='Defaults to env[OS_TENANT_ID]')
         parser.add_argument(
-            '--ksp-tenant-name', default=utils.env('KSP_TENANT_NAME'),
-            help='Defaults to env[KSP_TENANT_NAME]')
+            '--os-tenant-name', default=utils.env('OS_TENANT_NAME'),
+            help='Defaults to env[OS_TENANT_NAME]')
         parser.add_argument(
-            '--ksp-username', default=utils.env('KSP_USERNAME'),
-            help='Defaults to env[KSP_USERNAME]')
+            '--os-username', default=utils.env('OS_USERNAME'),
+            help='Defaults to env[OS_USERNAME]')
         parser.add_argument(
             '--payload-url', default=utils.env('payload_URL'),
             help='Defaults to env[payload_URL]')
