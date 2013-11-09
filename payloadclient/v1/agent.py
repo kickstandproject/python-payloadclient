@@ -17,7 +17,7 @@ from payloadclient.common import base
 from payloadclient.common import exception
 
 CREATE_ATTRIBUTES = [
-    'name',
+    'uuid',
 ]
 
 

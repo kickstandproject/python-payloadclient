@@ -26,11 +26,11 @@ class CreateAgent(base.CreateCommand):
 
     def add_known_arguments(self, parser):
         parser.add_argument(
-            'name', help='The name of the agent.')
+            'uuid', help='UUID of Keystone user.')
 
     def args2body(self, parsed_args):
         body = {
-            'name': parsed_args.name,
+            'uuid': parsed_args.uuid,
         }
 
         return body

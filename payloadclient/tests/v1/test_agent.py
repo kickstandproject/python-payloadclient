@@ -22,9 +22,7 @@ AGENT = {
     'uuid': 'b5142338-d88a-403e-bb14-e1fba0a318d2',
 }
 
-CREATE_AGENT = {
-    'name': 'demo',
-}
+CREATE_AGENT = AGENT
 
 FIXTURES = {
     '/v1/agents': {
