@@ -49,6 +49,7 @@ class ListAgent(base.ListCommand):
     list_columns = [
         'uuid',
         'user_id',
+        'project_id',
         'created_at',
         'updated_at',
     ]
