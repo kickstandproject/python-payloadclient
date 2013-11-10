@@ -46,6 +46,12 @@ class QueueManager(base.Manager):
     def _path(uuid=None):
         return '/v1/queues/%s' % uuid if uuid else '/v1/queues'
 
+    def add_member(self, uuid, agent_uuid):
+        path = '%s/%s/%s' % (self._path(uuid=uuid), 'members', agent_uuid)
+
+        return self.__create(
+            attributes=None, path=path)
+
     def create(self, **kwargs):
         path = self._path()
 
@@ -63,3 +69,13 @@ class QueueManager(base.Manager):
 
     def list(self):
         return self._list(self._path())
+
+    def list_member(self, uuid):
+        path = '%s/%s' % (self._path(uuid=uuid), 'members')
+
+        return self._list(path)
+
+    def remove_member(self, uuid, agent_uuid):
+        path = '%s/%s/%s' % (self._path(uuid=uuid), 'members', agent_uuid)
+
+        return self._delete(path)

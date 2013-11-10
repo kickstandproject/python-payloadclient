@@ -76,12 +76,14 @@ class CreateCommand(Command, show.ShowOne):
 class DeleteCommand(Command):
 
     allow_names = False
+    function = 'delete'
     log = None
     resource = None
 
     def _delete(self, parsed_args):
-        obj_deleter = getattr(self.get_client(), self.resource)
-        obj_deleter.delete(parsed_args.uuid)
+        obj = getattr(self.get_client(), self.resource)
+        func = getattr(obj, self.function)
+        func(parsed_args.uuid)
 
         return
 
@@ -109,6 +111,7 @@ class DeleteCommand(Command):
 
 class ListCommand(Command, lister.Lister):
 
+    function = 'list'
     list_columns = []
     log = None
     pagination = False
@@ -116,8 +119,12 @@ class ListCommand(Command, lister.Lister):
     sorting = False
 
     def _list(self, parsed_args):
-        obj_lister = getattr(self.get_client(), self.resource)
-        data = obj_lister.list()
+        obj = getattr(self.get_client(), self.resource)
+        func = getattr(obj, self.function)
+        try:
+            data = func(parsed_args.uuid)
+        except AttributeError:
+            data = func()
 
         return data
 
@@ -129,6 +136,10 @@ class ListCommand(Command, lister.Lister):
 
     def get_parser(self, prog_name):
         parser = super(ListCommand, self).get_parser(prog_name)
+        try:
+            self.add_known_arguments(parser)
+        except AttributeError:
+            pass
         utils.add_show_list_common_argument(parser)
 
         if self.pagination:

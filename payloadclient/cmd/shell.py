@@ -45,6 +45,9 @@ COMMAND = {
     'queue-create': queue.CreateQueue,
     'queue-delete': queue.DeleteQueue,
     'queue-list': queue.ListQueue,
+    'queue-member-add': queue.AddQueueMember,
+    'queue-member-list': queue.ListQueueMember,
+    'queue-member-remove': queue.RemoveQueueMember,
     'queue-show': queue.ShowQueue,
 }
 

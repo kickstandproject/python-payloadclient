@@ -18,6 +18,50 @@ import logging
 from payloadclient.shell.v1 import base
 
 
+class AddQueueMember(base.CreateCommand):
+    """Add member to a given queue."""
+
+    function = 'add_member'
+    resource = 'queues'
+    log = logging.getLogger(__name__ + '.AddMemberQueue')
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            'uuid', metavar='QUEUE', help='Queue UUID to use.')
+        parser.add_argument(
+            'agent_uuid', metavar='AGENT', help='Agent UUID to use.')
+
+    def args2body(self, parsed_args):
+        body = {
+            'uuid': parsed_args.uuid,
+            'agent_uuid': parsed_args.agent_uuid,
+        }
+
+        return body
+
+
+class RemoveQueueMember(base.CreateCommand):
+    """Remove member to a given queue."""
+
+    function = 'remove_member'
+    resource = 'queues'
+    log = logging.getLogger(__name__ + '.RemoveMemberQueue')
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            'uuid', metavar='QUEUE', help='Queue UUID to use.')
+        parser.add_argument(
+            'agent_uuid', metavar='AGENT', help='Agent UUID to use.')
+
+    def args2body(self, parsed_args):
+        body = {
+            'uuid': parsed_args.uuid,
+            'agent_uuid': parsed_args.agent_uuid,
+        }
+
+        return body
+
+
 class CreateQueue(base.CreateCommand):
     """Create a queue."""
 
@@ -65,6 +109,30 @@ class ListQueue(base.ListCommand):
     ]
     log = logging.getLogger(__name__ + '.ListQueue')
     resource = 'queues'
+
+
+class ListQueueMember(base.ListCommand):
+    """List queue members."""
+
+    function = 'list_member'
+    list_columns = [
+        'agent_uuid',
+        'created_at',
+        'updated_at',
+    ]
+    log = logging.getLogger(__name__ + '.ListQueueMember')
+    resource = 'queues'
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            'uuid', metavar='QUEUE', help='Queue UUID to use.')
+
+    def args2body(self, parsed_args):
+        body = {
+            'uuid': parsed_args.uuid,
+        }
+
+        return body
 
 
 class ShowQueue(base.ShowCommand):
