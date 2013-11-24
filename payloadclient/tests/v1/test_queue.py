@@ -34,6 +34,12 @@ CREATE_QUEUE = {
     'name': 'suppoert',
 }
 
+UPDATE_QUEUE = {
+    'description': 'Sales support.',
+    'disabled': True,
+    'name': 'sales',
+}
+
 FIXTURES = {
     '/v1/queues': {
         'GET': (
@@ -53,6 +59,10 @@ FIXTURES = {
         'DELETE': (
             {},
             None,
+        ),
+        'PUT': (
+            {},
+            UPDATE_QUEUE,
         ),
     },
 }
@@ -96,3 +106,11 @@ class QueueManagerTest(testtools.TestCase):
         ]
         self.assertEqual(self.api.calls, expect)
         self.assertEqual(res.uuid, QUEUE['uuid'])
+
+    def test_update(self):
+        res = self.manager.update(uuid=QUEUE['uuid'], **UPDATE_QUEUE)
+        expect = [
+            ('PUT', '/v1/queues/%s' % QUEUE['uuid'], {}, UPDATE_QUEUE),
+        ]
+        self.assertEqual(self.api.calls, expect)
+        self.assertTrue(res)

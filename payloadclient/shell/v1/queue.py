@@ -140,3 +140,29 @@ class ShowQueue(base.ShowCommand):
 
     log = logging.getLogger(__name__ + '.ShowQueue')
     resource = 'queues'
+
+
+class UpdateQueue(base.UpdateCommand):
+    """Update a queue."""
+
+    log = logging.getLogger(__name__ + '.UpdateQueue')
+    resource = 'queues'
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            '--name', help='The name of the queue.')
+        parser.add_argument(
+            '--description', help='A short description of the queue.')
+        parser.add_argument(
+            '--disabled', help='Toogle the queue availablity.')
+
+    def args2body(self, parsed_args):
+        body = {}
+        if parsed_args.description:
+            body['description'] = parsed_args.description
+        if parsed_args.description:
+            body['disabled'] = parsed_args.disabled
+        if parsed_args.name:
+            body['name'] = parsed_args.name
+
+        return body

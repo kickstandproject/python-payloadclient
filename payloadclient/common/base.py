@@ -51,6 +51,11 @@ class Manager(object):
 
         return [obj_class(self, res, loaded=True) for res in data if res]
 
+    def _update(self, url, body, response_key=None):
+        resp, body = self.api.json_request('PUT', url, body=body)
+        if body:
+            return self.resource_class(self, body)
+
 
 class Resource(object):
 

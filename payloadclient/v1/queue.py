@@ -22,6 +22,12 @@ CREATE_ATTRIBUTES = [
     'name',
 ]
 
+UPDATE_ATTRIBUTES = [
+    'description',
+    'disabled',
+    'name',
+]
+
 
 class Queue(base.Resource):
     def __repr__(self):
@@ -32,7 +38,7 @@ class QueueManager(base.Manager):
 
     resource_class = Queue
 
-    def __create(self, attributes, path, **kwargs):
+    def __check_keys(self, attributes, **kwargs):
         keys = {}
         for (key, value) in kwargs.items():
             if key in attributes:
@@ -40,7 +46,17 @@ class QueueManager(base.Manager):
             else:
                 raise exception.InvalidAttribute()
 
+        return keys
+
+    def __create(self, attributes, path, **kwargs):
+        keys = self.__check_keys(attributes=attributes, **kwargs)
+
         return self._create(path, keys)
+
+    def __update(self, attributes, path, **kwargs):
+        keys = self.__check_keys(attributes=attributes, **kwargs)
+
+        return self._update(path, keys)
 
     @staticmethod
     def _path(uuid=None):
@@ -79,3 +95,9 @@ class QueueManager(base.Manager):
         path = '%s/%s/%s' % (self._path(uuid=uuid), 'members', agent_uuid)
 
         return self._delete(path)
+
+    def update(self, uuid, **kwargs):
+        path = self._path(uuid=uuid)
+
+        return self.__update(
+            attributes=UPDATE_ATTRIBUTES, path=path, **kwargs)
