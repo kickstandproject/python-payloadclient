@@ -72,18 +72,23 @@ class Shell(app.App):
         self.api_version = apiversion
 
     def authenticate_user(self):
-        if not self.options.os_username:
-            raise exception.CommandError(
-                'You must provide a username via either --os-username or '
-                'env[OS_USERNAME]')
-        if not self.options.os_password:
-            raise exception.CommandError(
-                'You must provide a password via either --os-password or '
-                'env[OS_PASSWORD]')
-        if not self.options.payload_url:
-            raise exception.CommandError(
-                'You must provide a url via either --payload-url or '
-                'env[PAYLOAD_URL]')
+        if not (self.options.os_auth_token and self.options.payload_url):
+            if not self.options.os_username:
+                raise exception.CommandError(
+                    'You must provide a username via either --os-username or '
+                    'env[OS_USERNAME]')
+            if not self.options.os_password:
+                raise exception.CommandError(
+                    'You must provide a password via either --os-password or '
+                    'env[OS_PASSWORD]')
+            if not (self.options.os_tenant_id or self.options.os_tenant_name):
+                raise exception.CommandError(
+                    'You must provide a tenant_id via either --os-tenant-id '
+                    'or env[OS_TENANT_ID]')
+            if not self.options.os_auth_url:
+                raise exception.CommandError(
+                    'You must provide an auth url via either --os-auth-url or '
+                    'env[OS_AUTH_URL]')
 
         self.client_manager = client.get_client(
             self.api_version, **(self.options.__dict__))

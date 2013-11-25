@@ -42,10 +42,18 @@ def _get_ksclient(**kwargs):
                            insecure=kwargs.get('insecure'))
 
 
+def _get_endpoint(client, **kwargs):
+    """Get an endpoint using the provided keystone client."""
+    return client.service_catalog.url_for(
+        service_type=kwargs.get('service_type') or 'queue',
+        endpoint_type=kwargs.get('endpoint_type') or 'publicURL')
+
+
 def get_client(api_version, **kwargs):
-    endpoint = kwargs.get('payload_url')
+
     if kwargs.get('os_auth_token') and kwargs.get('payload_url'):
         token = kwargs.get('os_auth_token')
+        endpoint = kwargs.get('payload_url')
     elif (kwargs.get('os_username') and
             kwargs.get('os_password') and
             kwargs.get('os_auth_url') and
@@ -58,12 +66,16 @@ def get_client(api_version, **kwargs):
             'tenant_id': kwargs.get('os_tenant_id'),
             'tenant_name': kwargs.get('os_tenant_name'),
             'auth_url': kwargs.get('os_auth_url'),
+            'insecure': kwargs.get('insecure'),
         }
         _ksclient = _get_ksclient(**ks_kwargs)
         token = _ksclient.auth_token
+        endpoint = kwargs.get('payload_url') or \
+            _get_endpoint(_ksclient, **ks_kwargs)
 
     cli_kwargs = {
         'token': token,
+        'insecure': kwargs.get('insecure'),
     }
 
     return Client(api_version, endpoint, **cli_kwargs)
