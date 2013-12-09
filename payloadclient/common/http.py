@@ -98,7 +98,7 @@ class HTTPClient(object):
         elif resp.status in (301, 302, 305):
             return self._http_request(resp['location'], method, **kwargs)
         elif resp.status == 300:
-            raise exception.from_resoinse(resp)
+            raise exception.from_response(resp)
 
         return resp, body_iter
 
