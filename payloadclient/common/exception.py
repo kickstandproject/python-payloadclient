@@ -50,6 +50,14 @@ class CommunicationError(BaseException):
     """Unable to communicate with server."""
 
 
+class InvalidAttribute(BaseException):
+    pass
+
+
+class InvalidEndpoint(BaseException):
+    pass
+
+
 class HTTPException(Exception):
     """Base exception for all HTTP-derived exceptions."""
     code = 'N/A'
