@@ -34,6 +34,11 @@ class Queue(base.Resource):
         return '<Queue %s>' % self._info
 
 
+class QueueMember(base.Resource):
+    def __repr__(self):
+        return '<QueueMember %s>' % self._info
+
+
 class QueueManager(base.Manager):
 
     resource_class = Queue
@@ -89,7 +94,7 @@ class QueueManager(base.Manager):
     def list_member(self, uuid):
         path = '%s/%s' % (self._path(uuid=uuid), 'members')
 
-        return self._list(path)
+        return self._list(path, obj_class=QueueMember)
 
     def remove_member(self, uuid, agent_uuid):
         path = '%s/%s/%s' % (self._path(uuid=uuid), 'members', agent_uuid)
