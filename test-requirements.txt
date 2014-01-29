@@ -9,4 +9,4 @@ pylint
 requests
 sphinx>=1.1.2,<1.2
 testrepository>=0.0.13
-testtools>=0.9.27
+testtools>=0.9.32,<0.9.35
